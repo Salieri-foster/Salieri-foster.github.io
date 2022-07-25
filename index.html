@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js" integrity="sha512-iBAeBWWWFb8HqSBcrqcz98iIpuVH1la39dEYHtyQ/pGpeCQTQVvLJOWAuhv2Q7JSHp9k7hWA7sGxU3hHJe+tFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<style>
+    .introduction{
+        margin-left: 3%;
+        width:80%;
+        height:30%;
+    }
+    .chapter{
+        margin-left: 3%;
+        width:80%;
+        height:10%;
+    }
+    .chart{
+        margin-left: 5%;
+        float:left;
+    }
+    .detail{
+        margin-left: 40px;
+    }
+    button{
+        height: 40px;
+        width: 200px;
+    }
+    #tooltip {
+        opacity: 0;
+        position: absolute;
+        text-align: left;
+        width: 150px;
+        height: 35px;
+        padding: 10px;
+        background: lightgoldenrodyellow;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+    }
+    #blue{
+        margin-left: 5%;
+        color: steelblue;
+    }
+    #red{
+        margin-left: 5%;
+        color: red;
+    }
+</style>
+<html>
+<head>
+    <title>Narrative Visualization by Haoyu Gao</title>
+</head>
+    <body onload='init()'>
+
+        <div class="introduction">
+            <h2>Growth rate of COVID-19 cases and deaths in the United States</h2>
+            <b>[Intro]</b> There have been about two and a half years since the COVID-19 virus was discovered in the United States.
+            In order to get a better understanding of the epidemic,
+            this page was built for providing viewers with facts on the spread of the epidemic from November 2020 to May 2022.<br>
+            <b>[How to use?]</b> On the main page, there is a chart showing the growth rate of the accumulative cases and deaths of COVID-19 every 3 months, you can use the buttons below to move on the timeline.
+            If you need more details about a specific time period, you can also use the "show me more details" to see more facts about it.<br>
+            Hope this can help!
+        </div>
+
+        <div class="chapter">
+            <div id="state01">
+                <h3>&nbsp;&nbsp;&nbsp;Period 01: before ~ 2020-10</h3>
+                On 2020-01-21, COVID-19 cases were first reported in the United States. <br>
+                Its spread speed was not that fast in the first three months, however, it spread all over the country at a terrifying speed after that. <br>
+                At the beginning of 2020-05, the number of the accumulative cases is 215943 and at the beginning of 2020-11 the number is 9283202,
+                and the overall growth rate has reached 4198.91%!
+            </div>
+            <div id="state02">
+                <h3>&nbsp;&nbsp;&nbsp;Period 02: 2020-11 ~ 2021-01</h3>
+                The growth rate of cases and deaths reached a climax in this period.<br><br>
+                On 2020-12-11, The FDA(Food and Drug Administration) granted emergency use authorization for the first vaccine(Pfizer-BioNTech).<br><br>
+            </div>
+            <div id="state03">
+                <h3>&nbsp;&nbsp;&nbsp;Period 03: 2021-02 ~ 2021-04</h3>
+                After Joe Biden was selected to be the President, his administration made a big push for vaccination.
+                On 2021-03-19, the administered vaccine doses reached 100 million and on 2021-04-21, the number reached 200 million.<br><br>
+
+                Also on 2021-04-19, all U.S. states had opened vaccine eligibility to residents aged 16 and over.
+            </div>
+            <div id="state04">
+                <h3>&nbsp;&nbsp;&nbsp;Period 04: 2021-05 ~ 2021-07</h3>
+                By July 2021, the Delta Strain became dominant in the US. It accounts for the terrible epidemic condition in the previous months.<br><br>
+
+                With the implementation of vaccines and the rise of public hygiene awareness, the growth of cases and deaths slowed down.<br><br>
+            </div>
+            <div id="state05">
+                <h3>&nbsp;&nbsp;&nbsp;Period 05: 2021-08 ~ 2021-10</h3>
+                By 2021-08-02, 70% of the United States' adult had received at least one vaccine dose and
+
+                on 2021-08-12, the FDA amended the EUA for vaccines in order to allow a third, booster shot.<br><br>
+
+                With all the countermeasures of the epidemic, the growth of cases and deaths fell to the bottom.<br>
+            </div>
+            <div id="state06">
+                <h3>&nbsp;&nbsp;&nbsp;Period 06: 2021-11 ~ 2022-01</h3>
+                On 2021-12-01, SARS-CoV-2 Omicron (the Omicron Strain) was first found in the United States (California).<br><br>
+
+                By Christmas 2021, the Omicron Strain became dominant in the US.
+                It has a strong transmission ability which led to another small peak in the growth rate of cases and deaths.<br><br>
+            </div>
+            <div id="state07">
+                <h3>&nbsp;&nbsp;&nbsp;Period 07: 2022-02 ~ 2022-04</h3>
+                With all the countermeasures and experience against COVID-19, the epidemic has been greatly alleviated, hope we can end it soon!<br><br><br><br>
+            </div>
+        </div>
+
+        <div class="chart">
+            <svg width="1080" height="450"></svg>
+            <p id="blue">The blue line is for the growth rate of accumulative cases.<p>
+            <p id="red">The red line is for the growth rate of accumulative deaths.<p>
+            <p>If you want to know the exact data of these rates, just put your mouse over the points.<p>
+        </div>
+
+        <div class="detail">
+            <br><br><br><br><br><button><a id="detail" href="details.html?state=1" target="_blank">show me more details</a></button>
+            <br><br><br><br><br><button id="next"> move to next season </button>
+            <br><br><br><br><br><button id="last"> back to last season </button>
+        </div>
+
+        <div>
+            <br>
+<!--            <p id="blue">The blue line is for the growth rate of accumulative cases.<p>-->
+<!--            <p id="red">The red line is for the growth rate of accumulative deaths.<p>-->
+        </div>
+
+        <div id="tooltip"></div>
+
+
+        <script>
+            async function init(){
+
+                // variables definition
+                var state = 1
+                const data = await d3.csv("us.csv")
+                var x = d3.scaleOrdinal().domain(['2020.11','2021.02','annotation1','annotation2','2021.05','annotation3','2021.08','2021.11','annotation4','annotation5','2022.02','2022.05']).range([0, 90, 140, 170, 180, 245, 270, 360, 415, 440, 450, 540])
+                var y = d3.scaleLinear().domain([5,200]).range([400,0])
+                var tooltip = d3.select("#tooltip");
+
+                // painting charts
+                var line1 = d3.line()
+                    .x(d => x(d.date))
+                    .y(d => y(d.caseRate))
+                var line2 = d3.line()
+                    .x(d => x(d.date))
+                    .y(d => y(d.deathRate))
+
+                function updateChapter(){
+                    document.getElementById("state01").style.display = (state == '1' ? '' : 'none')
+                    document.getElementById("state02").style.display = (state == '2' ? '' : 'none')
+                    document.getElementById("state03").style.display = (state == '3' ? '' : 'none')
+                    document.getElementById("state04").style.display = (state == '4' ? '' : 'none')
+                    document.getElementById("state05").style.display = (state == '5' ? '' : 'none')
+                    document.getElementById("state06").style.display = (state == '6' ? '' : 'none')
+                    document.getElementById("state07").style.display = (state == '7' ? '' : 'none')
+                }
+
+                function updateChart(){
+                    d3.select("svg")
+                        .selectAll("path")
+                        .remove()
+
+                    d3.select("svg")
+                        .selectAll("circle")
+                        .remove()
+
+                    d3.select("svg")
+                        .append("g")
+                        .attr("transform","translate("+30+","+30+")")
+                        .call(d3.axisLeft(y).tickValues([5, 15, 25, 35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145, 155, 165, 175, 185]).tickFormat(d3.format("~s")));
+
+                    d3.select("svg")
+                        .append("g")
+                        .attr("transform","translate("+30+","+430+")")
+                        .call(d3.axisBottom(x).tickValues(['2020.11','2021.02','2021.05','2021.08','2021.11','2022.02','2022.05']));
+
+                    // growth rate of cases
+                    d3.select("svg")
+                        .append("g")
+                        .attr("transform","translate("+30+","+30+")")
+                        .selectAll("path")
+                        .data(data)
+                        .enter()
+                        .append("path")
+                        .attr("d",line1(data.slice(0,state)))
+                        .style('fill','none')
+                        .style("stroke","steelblue")
+                        .style("stroke-width","1")
+                        .style("stroke-miterlimit","1");
+
+                    d3.select("svg")
+                        .append("g")
+                        .attr("transform","translate("+30+","+30+")")
+                        .selectAll("circle")
+                        .data(data.slice(0,state))
+                        .enter()
+                        .append("circle")
+                        .attr("cx",function(d,i){return x(d.date);})
+                        .attr("cy",function(d,i){return y(d.caseRate);})
+                        .attr("r",function(d,i){return 5;})
+                        .style('fill','steelblue')
+                        .on("mouseover", function(event,d){
+                            tooltip.transition()
+                                .duration(200)
+                                .style("opacity",1);
+                            tooltip.html(d.date +"<br>case rate: " + d.caseRate + "%")
+                                .style("left", (event.pageX) + "px")
+                                .style("top", (event.pageY) + "px")
+                        })
+                        .on("mouseout", function(){
+                            tooltip.transition()
+                                .duration(500)
+                                .style("opacity",0);
+                        });
+
+                    // growth rate of deaths
+                    d3.select("svg")
+                        .append("g")
+                        .attr("transform","translate("+30+","+30+")")
+                        .selectAll("path")
+                        .data(data)
+                        .enter()
+                        .append("path")
+                        .attr("d",line2(data.slice(0,state)))
+                        .style('fill','none')
+                        .style("stroke","red")
+                        .style("stroke-width","1")
+                        .style("stroke-miterlimit","1");
+
+                    d3.select("svg")
+                        .append("g")
+                        .attr("transform","translate("+30+","+30+")")
+                        .selectAll("circle")
+                        .data(data.slice(0,state))
+                        .enter()
+                        .append("circle")
+                        .attr("cx",function(d,i){return x(d.date);})
+                        .attr("cy",function(d,i){return y(d.deathRate);})
+                        .attr("r",function(d,i){return 5;})
+                        .style('fill','red')
+                        .on("mouseover", function(event,d){
+                            tooltip.transition()
+                                .duration(200)
+                                .style("opacity",1);
+                            tooltip.html(d.date +"<br>death rate: " + d.deathRate + "%")
+                                .style("left", (event.pageX) + "px")
+                                .style("top", (event.pageY) + "px")
+                        })
+                        .on("mouseout", function(){
+                            tooltip.transition()
+                                .duration(500)
+                                .style("opacity",0);
+                        });
+                }
+
+                // triggers
+                document.getElementById("next").addEventListener("click", nextState);
+                function nextState() {
+                    if(state < 7){
+                        state = state + 1;
+                        updateChapter();
+                        updateChart();
+                        updateAnnotation(state);
+                    }
+                    document.getElementById("next").style.visibility = (state==7?'hidden':'visible')
+                    document.getElementById("last").style.visibility = (state<=1?'hidden':'visible')
+                    document.getElementById("detail").setAttribute("href", "details.html?state=" + state)
+
+                }
+                document.getElementById("last").addEventListener("click", lastState);
+                function lastState() {
+                    if(state > 1){
+                        state = state - 1;
+                        updateChapter();
+                        updateChart();
+                        updateAnnotation(state);
+                    }
+                    document.getElementById("next").style.visibility = (state>=7?'hidden':'visible')
+                    document.getElementById("last").style.visibility = (state==1?'hidden':'visible')
+                    document.getElementById("detail").setAttribute("href", "details.html?state=" + state)
+                }
+
+                // other settings
+                document.getElementById("last").style.visibility = 'hidden'
+
+
+                // 加annotation
+                function updateAnnotation(state){
+                    d3.select("svg")
+                    .selectAll("g.annotation-group")
+                    .remove()
+
+                    const type = d3.annotationLabel
+                    const annotations = [{
+                        note: {
+                            label: "The Delta Strain's first detection in the United States.",
+                            bgPadding: 20,
+                            title: "2021-02-23"
+                        },
+                        //can use x, y directly instead of data
+                        data: { date: 'annotation1', rate: 185 },
+                        className: "show-bg",
+                        ny: 0,
+                        nx: 'annotation1',
+                    },
+                    {
+                        note: {
+                            label: "The number of administered vaccine doses reached 200 millions.",
+                            bgPadding: 20,
+                            title: "2021-04-21"
+                        },
+                        //can use x, y directly instead of data
+                        data: { date: 'annotation2', rate: 120 },
+                        className: "show-bg",
+                        ny: 0,
+                        nx: 'annotation2',
+                    },
+                    {
+                        note: {
+                            label: "The Delta Strain became dominant in the United States.",
+                            bgPadding: 20,
+                            title: "2021-06"
+                        },
+                        //can use x, y directly instead of data
+                        data: { date: 'annotation3', rate: 60 },
+                        className: "show-bg",
+                        ny: 0,
+                        nx: 'annotation3',
+                    },
+                    {
+                        note: {
+                            label: "The Omicron Strain's first detection in the United States.",
+                            bgPadding: 20,
+                            title: "2021-12-01"
+                        },
+                        //can use x, y directly instead of data
+                        data: { date: 'annotation4', rate: 80 },
+                        className: "show-bg",
+                        ny: 0,
+                        nx: 'annotation4',
+                    },
+                    {
+                        note: {
+                            label: "The Omicron Strain's became dominant in the United States within a month.",
+                            bgPadding: 20,
+                            title: "2021-12-25"
+                        },
+                        //can use x, y directly instead of data
+                        data: { date: 'annotation5', rate: 170 },
+                        className: "show-bg",
+                        ny: 0,
+                        nx: 'annotation5',
+                    }]
+
+                    var limit = 5
+                    if(state<=2){
+                        limit = 0;
+                    }
+                    else if(state==3){
+                        limit = 2;
+                    }
+                    else if(state<=5){
+                        limit = 3;
+                    }
+
+                    const makeAnnotations = d3.annotation()
+                        .editMode(true)
+                        .notePadding(15)
+                        .type(type)
+                        .accessors({
+                            x: d => x(d.date),
+                            y: d => y(d.rate)
+                        })
+                        .accessorsInverse({
+                            date: d => x.invert(d.x),
+                            rate: d => y.invert(d.y)
+                        })
+                        .annotations(annotations.slice(0,limit))
+
+                    d3.select("svg")
+                        .append("g")
+                        .attr("class", "annotation-group")
+                        .call(makeAnnotations)
+                }
+
+                // initialization
+                updateChapter();
+                updateChart();
+            }
+
+        </script>
+
+
+    </body>
+</html>
+

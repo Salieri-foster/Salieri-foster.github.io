@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<style>
+    div{
+        width:80%;
+        height:40%;
+        margin-left: 3%;
+    }
+    #title{
+        margin-left: 1%;
+    }
+</style>
+<html>
+    <head>
+        <title>details</title>
+    </head>
+    <body onload='init()'>
+        <h2 id="title">Epidemic details in the selected time period</h2>
+
+        <div id="detail01">
+            <h3>before ~ 2020-10:</h3>
+            Accumulative cases at the end of the period: 9283202<br><br>
+
+            Accumulative deaths at the end of the period: 230940<br><br>
+
+            death rate of all cases: 2.49%<br><br>
+
+            3 States having the most cases: California, New York, Texas<br>
+            3 States having the most deaths: New York, New Jersey, Texas
+        </div>
+
+        <div id="detail02">
+            <h3>2020-11 ~ 2021-01:</h3>
+            Accumulative cases at the start of the period: 9283202<br>
+            Accumulative cases at the end of the period: 26363284<br>
+            Growth rate of accumulative cases: 183.99%<br><br>
+
+            Accumulative deaths at the start of the period: 230940<br>
+            Accumulative deaths at the end of the period: 443249<br>
+            Growth rate of accumulative deaths: 91.93%<br><br>
+
+            death rate of all cases: 1.68%<br><br>
+
+            3 States having the most cases: California, Texas, New York<br>
+            3 States having the most deaths: New York, California, Texas<br><br>
+
+            3 States having the most cases in the last time period: California, Texas, Florida<br>
+            3 States having the most deaths in the last time period: New York, Texas, California
+        </div>
+
+        <div id="detail03">
+            <h3>2021-02 ~ 2021-04:</h3>
+            Accumulative cases at the start of the period: 26363284<br>
+            Accumulative cases at the end of the period: 32407133<br>
+            Growth rate of accumulative cases: 22.93%<br><br>
+
+            Accumulative deaths at the start of the period: 443249<br>
+            Accumulative deaths at the end of the period: 576352<br>
+            Growth rate of accumulative deaths: 30.03%<br><br>
+
+            death rate of all cases: 1.78%<br><br>
+
+            3 States having the most cases: California, Texas, New York<br>
+            3 States having the most deaths: New York, California, Texas<br><br>
+
+            3 States having the most cases in the last time period: California, Texas, Florida<br>
+            3 States having the most deaths in the last time period: California, New York, Texas
+        </div>
+
+        <div id="detail04">
+            <h3>2021-05 ~ 2021-07:</h3>
+            Accumulative cases at the start of the period: 32407133<br>
+            Accumulative cases at the end of the period: 35041458<br>
+            Growth rate of accumulative cases: 8.13%<br><br>
+
+            Accumulative deaths at the start of the period: 576352<br>
+            Accumulative deaths at the end of the period: 612982<br>
+            Growth rate of accumulative deaths: 6.36%<br><br>
+
+            death rate of all cases: 1.75%<br><br>
+
+            3 States having the most cases: California, Texas, New York<br>
+            3 States having the most deaths: New York, California, Texas<br><br>
+
+            3 States having the most cases in the last time period: California, Texas, Florida<br>
+            3 States having the most deaths in the last time period: California, New York, Texas
+        </div>
+
+        <div id="detail05">
+            <h3>2021-08 ~ 2021-10:</h3>
+            Accumulative cases at the start of the period: 35041458<br>
+            Accumulative cases at the end of the period: 46058668<br>
+            Growth rate of accumulative cases: 31.44%<br><br>
+
+            Accumulative deaths at the start of the period: 612982<br>
+            Accumulative deaths at the end of the period: 746894<br>
+            Growth rate of accumulative deaths: 21.85%<br><br>
+
+            death rate of all cases: 1.62%<br><br>
+
+            3 States having the most cases: California, Texas, New York<br>
+            3 States having the most deaths: New York, California, Texas<br><br>
+
+            3 States having the most cases in the last time period: California, Texas, Florida<br>
+            3 States having the most deaths in the last time period: California, Texas, New York
+        </div>
+
+        <div id="detail06">
+            <h3>2021-11 ~ 2022-01:</h3>
+            Accumulative cases at the start of the period: 46058668<br>
+            Accumulative cases at the end of the period: 75285900<br>
+            Growth rate of accumulative cases: 63.46%<br><br>
+
+            Accumulative deaths at the start of the period: 746894<br>
+            Accumulative deaths at the end of the period: 889525<br>
+            Growth rate of accumulative deaths: 19.1%<br><br>
+
+            death rate of all cases: 1.18%<br><br>
+
+            3 States having the most cases: California, Texas, New York<br>
+            3 States having the most deaths: New York, California, Texas<br><br>
+
+            3 States having the most cases in the last time period: California, Texas, Florida<br>
+            3 States having the most deaths in the last time period: California, Texas, Florida
+        </div>
+
+        <div id="detail07">
+            <h3>2022-02 ~ 2022-04:</h3>
+            Accumulative cases at the start of the period: 75285900<br>
+            Accumulative cases at the end of the period: 81274401<br>
+            Growth rate of accumulative cases: 7.95%<br><br>
+
+            Accumulative deaths at the start of the period: 889525<br>
+            Accumulative deaths at the end of the period: 992033<br>
+            Growth rate of accumulative deaths: 11.52%<br><br>
+
+            death rate of all cases: 1.22%<br><br>
+
+            3 States having the most cases: California, Texas, New York<br>
+            3 States having the most deaths: California, New York, Texas<br><br>
+
+            3 States having the most cases in the last time period: California, Texas, Florida<br>
+            3 States having the most deaths in the last time period: California, Texas, Florida
+        </div>
+
+        <script>
+
+            // get parameter 'state'
+            function GetRequest() {
+                var url = location.search; //获取url中"?"符后的字串
+                var theRequest = 'error';
+                if (url.indexOf("?") != -1) {
+                    theRequest = decodeURIComponent(url.substring(url.length - 1))
+                }
+                return theRequest;
+            }
+
+            async function init() {
+
+                // show corresponding <div>
+                var state = GetRequest()
+
+                document.getElementById("detail01").style.display = (state == '1' ? '' : 'none')
+                document.getElementById("detail02").style.display = (state == '2' ? '' : 'none')
+                document.getElementById("detail03").style.display = (state == '3' ? '' : 'none')
+                document.getElementById("detail04").style.display = (state == '4' ? '' : 'none')
+                document.getElementById("detail05").style.display = (state == '5' ? '' : 'none')
+                document.getElementById("detail06").style.display = (state == '6' ? '' : 'none')
+                document.getElementById("detail07").style.display = (state == '7' ? '' : 'none')
+
+            }
+        </script>
+
+    </body>
+</html>
